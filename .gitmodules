@@ -7,7 +7,7 @@
 [submodule "n64-switch/components/Blue-N64-Control-ESP32"]
 	path = n64-switch/components/HOJA-LIB-ESP32
 	url = git@github.com:pepa667/HOJA-LIB-ESP32.git
-	branch = prev_version
+	branch = main
 [submodule "n64-switch/components/BluControl-SDK-ESP32"]
 	path = n64-switch/components/BluControl-SDK-ESP32
 	url = git@github.com:pepa667/BluControl-SDK-ESP32.git
