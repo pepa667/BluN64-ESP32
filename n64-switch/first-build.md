@@ -25,7 +25,7 @@ O processo foi guiado pelo **GitHub Copilot**, que identificou e corrigiu automa
 
 **Erro:**
 
-```
+```shell
 CMake Error: generator: Ninja
 Does not match the generator used previously: Unix Makefiles
 ```
@@ -46,7 +46,7 @@ rm -rf build/CMakeCache.txt build/CMakeFiles
 
 **Erro:**
 
-```
+```shell
 Failed to resolve component 'riscv' required by component 'HOJA-LIB-ESP32':
 component not registered.
 ```
@@ -73,7 +73,7 @@ component not registered.
 
 **Erro:**
 
-```
+```shell
 error: the comparison will always evaluate as 'false' for the address of
 'bd_addr' will never be NULL [-Werror=address]
 ```
@@ -100,7 +100,7 @@ error: the comparison will always evaluate as 'false' for the address of
 
 **Erros:**
 
-```
+```shell
 error: passing argument 1 of 'hoja_register_button_callback' from
 incompatible pointer type
   expected 'hoja_button_callback_t' {aka 'void (*)(void)'}
@@ -143,7 +143,7 @@ incompatible pointer type
 
 **Erro:**
 
-```
+```shell
 error: 'HEVT_BT_DISCONNECT' undeclared (first use in this function);
 did you mean 'HEVT_BT_DISCONNECTED'?
 ```
@@ -165,7 +165,7 @@ did you mean 'HEVT_BT_DISCONNECTED'?
 
 **Erros:**
 
-```
+```shell
 error: passing argument 3 of 'hoja_event_cb' makes integer from pointer
 without a cast [-Wint-conversion]
 
@@ -194,7 +194,7 @@ pointer type [-Wincompatible-pointer-types]
 
 ## Resultado
 
-```
+```shell
 Successfully created esp32 image.
 Project build complete. To flash, run:
  idf.py -p (PORT) flash
@@ -216,10 +216,10 @@ Ver: [fix-build.sh](./fix-build.sh)
 
 ## Arquivos Modificados
 
-| Arquivo | Tipo de mudança |
-|---|---|
-| `components/HOJA-LIB-ESP32/CMakeLists.txt` | Removida dependência `riscv` |
-| `components/HOJA-LIB-ESP32/utilities/util_bt_hid.c` | Removida comparação `bd_addr == NULL` |
-| `components/HOJA-LIB-ESP32/cores/core_switch_backend.c` | Removida comparação `bd_addr == NULL` |
-| `components/HOJA-LIB-ESP32/utilities/util_wired_detect.c` | `NULL→0x00` e `task→&task` |
-| `main/main.c` | Callbacks void(void), globals diretos, typo `DISCONNECT` |
+| Arquivo                                                   | Tipo de mudança                                          |
+| --------------------------------------------------------- | -------------------------------------------------------- |
+| `components/HOJA-LIB-ESP32/CMakeLists.txt`                | Removida dependência `riscv`                             |
+| `components/HOJA-LIB-ESP32/utilities/util_bt_hid.c`       | Removida comparação `bd_addr == NULL`                    |
+| `components/HOJA-LIB-ESP32/cores/core_switch_backend.c`   | Removida comparação `bd_addr == NULL`                    |
+| `components/HOJA-LIB-ESP32/utilities/util_wired_detect.c` | `NULL→0x00` e `task→&task`                               |
+| `main/main.c`                                             | Callbacks void(void), globals diretos, typo `DISCONNECT` |
