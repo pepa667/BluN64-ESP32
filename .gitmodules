@@ -18,3 +18,11 @@
 	path = n64-blueretro/components/BluControl-SDK-ESP32
 	url = git@github.com:pepa667/BluControl-SDK-ESP32.git
 	branch = main
+[submodule "BluControl-SDK-ESP32"]
+	branch = main
+[submodule "HOJA-LIB-ESP32"]
+	branch = main
+[submodule "esp-nimble-cpp"]
+	branch = main
+[submodule "ESP32-BLE-Gamepad-idf"]
+	branch = main

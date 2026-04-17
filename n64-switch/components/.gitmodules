@@ -1,0 +1,4 @@
+[submodule "BluControl-SDK-ESP32"]
+	branch = main
+[submodule "HOJA-LIB-ESP32"]
+	branch = main
