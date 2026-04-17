@@ -1,0 +1,15 @@
+[submodule "bbpC-blueretro/components/BluControl-SDK-ESP32"]
+	path = bbpC-blueretro/components/BluControl-SDK-ESP32
+	url = git@github.com:pepa667/BluControl-SDK-ESP32.git
+	branch = brand
+[submodule "bbpC-blueretro/components/ESP32-BLE-Gamepad-idf"]
+	path = bbpC-blueretro/components/ESP32-BLE-Gamepad-idf
+	url = git@github.com:pepa667/ESP32-BLE-Gamepad-idf.git
+	branch = brand
+[submodule "bbpC-blueretro/components/esp-nimble-cpp"]
+	path = bbpC-blueretro/components/esp-nimble-cpp
+	url = git@github.com:pepa667/esp-nimble-cpp.git
+[submodule "bbpC-switch/components/HOJA-LIB-ESP32"]
+	path = bbpC-switch/components/HOJA-LIB-ESP32
+	url = git@github.com:pepa667/HOJA-LIB-ESP32.git
+	branch = brand
