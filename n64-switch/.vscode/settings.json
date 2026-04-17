@@ -1,6 +1,7 @@
 {
-    "idf.portWin": "COM6",
-    "idf.adapterTargetName": "esp32",
-    "idf.flashType": "UART",
-    "idf.currentSetup": "/Users/pepa/.espressif/v5.5.3/esp-idf"
+  "idf.portWin": "COM6",
+  "idf.adapterTargetName": "esp32",
+  "idf.flashType": "UART",
+  "idf.currentSetup": "/Users/pepa/.espressif/v5.5.3/esp-idf",
+  "C_Cpp.errorSquiggles": "disabled"
 }
