@@ -15,12 +15,12 @@
 extern "C" {
 #endif
 #include "blucontrol_mode.h"
-#include "n64-pad.h"
+#include "bbpC-pad.h"
 #ifdef __cplusplus
 }
 #endif
 
-struct n64Button
+struct bbpCButton
 {
     gpio_num_t pinNumber;
     int button;

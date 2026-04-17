@@ -1,28 +1,20 @@
-[submodule "n64-blueretro/components/esp-nimble-cpp"]
-	path = n64-blueretro/components/esp-nimble-cpp
-	url = git@github.com:pepa667/esp-nimble-cpp.git
+[submodule "bbpC-blueretro/components/BluControl-SDK-ESP32"]
+	path = bbpC-blueretro/components/BluControl-SDK-ESP32
+	url = https://github.com/JPZV/BluControl-SDK-ESP32.git
 	branch = main
-[submodule "n64-blueretro/components/ESP32-BLE-Gamepad-idf"]
-	path = n64-blueretro/components/ESP32-BLE-Gamepad-idf
-	url = git@github.com:pepa667/ESP32-BLE-Gamepad-idf.git
+[submodule "bbpC-blueretro/components/esp-nimble-cpp"]
+	path = bbpC-blueretro/components/esp-nimble-cpp
+	url = https://github.com/h2zero/esp-nimble-cpp.git
+	branch = master
+[submodule "bbpC-blueretro/components/ESP32-BLE-Gamepad-idf"]
+	path = bbpC-blueretro/components/ESP32-BLE-Gamepad-idf
+	url = https://github.com/JPZV/ESP32-BLE-Gamepad-idf.git
+	branch = master
+[submodule "bbpC-switch/components/BluControl-SDK-ESP32"]
+	path = bbpC-switch/components/BluControl-SDK-ESP32
+	url = https://github.com/JPZV/BluControl-SDK-ESP32.git
 	branch = main
-[submodule "n64-switch/components/Blue-N64-Control-ESP32"]
-	path = n64-switch/components/HOJA-LIB-ESP32
-	url = git@github.com:pepa667/HOJA-LIB-ESP32.git
-	branch = main
-[submodule "n64-switch/components/BluControl-SDK-ESP32"]
-	path = n64-switch/components/BluControl-SDK-ESP32
-	url = git@github.com:pepa667/BluControl-SDK-ESP32.git
-	branch = main
-[submodule "n64-blueretro/components/BluControl-SDK-ESP32"]
-	path = n64-blueretro/components/BluControl-SDK-ESP32
-	url = git@github.com:pepa667/BluControl-SDK-ESP32.git
-	branch = main
-[submodule "BluControl-SDK-ESP32"]
-	branch = main
-[submodule "HOJA-LIB-ESP32"]
-	branch = main
-[submodule "esp-nimble-cpp"]
-	branch = main
-[submodule "ESP32-BLE-Gamepad-idf"]
+[submodule "bbpC-switch/components/HOJA-LIB-ESP32"]
+	path = bbpC-switch/components/HOJA-LIB-ESP32
+	url = https://github.com/HandHeldLegend/HOJA-LIB-ESP32.git
 	branch = main

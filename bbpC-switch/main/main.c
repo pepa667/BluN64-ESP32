@@ -32,12 +32,12 @@ void button_task(void)
     // Combinations
     if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_L_PIN))
     {
-        ESP_LOGI("BluN64", "Start + L combo (Home)");
+        ESP_LOGI("bebopCORE", "Start + L combo (Home)");
         hoja_button_data.button_home        |= 1; //Home
     }
     else if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_R_PIN))
     {
-        ESP_LOGI("BluN64", "Start + R combo (ZR)");
+        ESP_LOGI("bebopCORE", "Start + R combo (ZR)");
         hoja_button_data.button_stick_left  |= 1; //ZR
     }
     else
@@ -58,7 +58,7 @@ void button_task(void)
 
 void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 {
-    printf("BlueN64 Control Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
+    printf("BlueBBPC Control Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
     if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECTED)
     {
         //This shouldn't be needed, but HOJA glitches after disconnecting the Switch... so... ¯\_(ツ)_/¯
@@ -72,8 +72,8 @@ void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 void stick_task(void)
 {
     // Joystick
-    int x_data = n64_get_joystick_x();
-    int y_data = n64_get_joystick_y();
+    int x_data = bbpC_get_joystick_x();
+    int y_data = bbpC_get_joystick_y();
 	
     // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
     if (abs(x_data) <= 10)
@@ -94,23 +94,23 @@ void stick_task(void)
 
 void app_main(void)
 {
-    printf("BlueN64 Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
+    printf("BlueBBPC Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
     hoja_register_button_callback(button_task);
     hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);
 
     blucontrol_mode_init(false);
-    n64_init();
+    bbpC_init();
 
     hoja_init();
     hoja_set_core(HOJA_CORE_NS);
-    core_ns_set_subcore(NS_TYPE_N64);
+    core_ns_set_subcore(NS_TYPE_BBPC);
 
     while(hoja_start_core() != HOJA_OK)
     {
         vTaskDelay(100 / portTICK_PERIOD_MS);
-        printf("BlueN64 Control. Retrying...\n");
+        printf("BlueBBPC Control. Retrying...\n");
     }
-    printf("BlueN64 Control. Switch Connected!\n");
+    printf("BlueBBPC Control. Switch Connected!\n");
 }

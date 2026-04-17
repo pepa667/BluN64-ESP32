@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# fix-build.sh — n64-switch first build patches
+# fix-build.sh — bbpC-switch first build patches
 # Built with the help of GitHub Copilot
 #
-# Aplica todas as correções necessárias para compilar o firmware n64-switch
+# Aplica todas as correções necessárias para compilar o firmware bbpC-switch
 # com ESP-IDF v5.4 / GCC 14.2.0 (xtensa-esp32-elf) a partir de um clone limpo.
 #
 # Uso:
-#   cd firmware/n64-switch
+#   cd firmware/bbpC-switch
 #   bash fix-build.sh
 # =============================================================================
 
@@ -37,7 +37,7 @@ apply_patch() {
 
 echo ""
 echo "======================================================"
-echo "  fix-build.sh — n64-switch patches"
+echo "  fix-build.sh — bbpC-switch patches"
 echo "  GitHub Copilot · ESP-IDF v5.4 · ESP32 (Xtensa)"
 echo "======================================================"
 echo ""

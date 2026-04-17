@@ -1,12 +1,12 @@
-#ifndef N64_PAD_H
-#define N64_PAD_H
+#ifndef BBPC_PAD_H
+#define BBPC_PAD_H
 
 #include "driver/gpio.h"
 #include "esp_ota_ops.h"
 #include "esp_partition.h"
 #include "esp_system.h"
 
-#if CONFIG_BLUN64_PINOUT_TYPE_ORIGINAL
+#if CONFIG_BBPCORE_PINOUT_TYPE_ORIGINAL
     // Buttons
     #define BUTTON_A_PIN        GPIO_NUM_27
     #define BUTTON_B_PIN        GPIO_NUM_14
@@ -95,8 +95,8 @@
 #define MODE_SWITCH     1
 #define MODE_BLUERETRO  2
 
-void n64_init(void);
-int n64_get_joystick_x(void);
-int n64_get_joystick_y(void);
+void bbpC_init(void);
+int bbpC_get_joystick_x(void);
+int bbpC_get_joystick_y(void);
 
 #endif

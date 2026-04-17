@@ -1,4 +1,4 @@
-#include "n64-pad.h"
+#include "bbpC-pad.h"
 
 int joystick_x_value = 0;
 int joystick_y_value = 0;
@@ -51,7 +51,7 @@ void joystick_interrupt_handler(void *params)
     }
 }
 
-void n64_init(void)
+void bbpC_init(void)
 {
     gpio_config_t io_conf = {};
 
@@ -78,11 +78,11 @@ void n64_init(void)
     ESP_ERROR_CHECK(gpio_isr_handler_add(JOYSTICK_Y_INT_PIN, joystick_interrupt_handler, (void *)JOYSTICK_Y_AXIS));
 }
 
-int n64_get_joystick_x(void)
+int bbpC_get_joystick_x(void)
 {
     return joystick_x_value;
 }
-int n64_get_joystick_y(void)
+int bbpC_get_joystick_y(void)
 {
     return joystick_y_value;
 }

@@ -3089,11 +3089,11 @@ CONFIG_WL_SECTOR_SIZE=4096
 # end of Wear Levelling
 
 #
-# BluN64 Configuration
+# bebopCORE Configuration
 #
-CONFIG_BLUN64_PINOUT_TYPE_ORIGINAL=y
-# CONFIG_BLUN64_PINOUT_TYPE_YAKARA is not set
-# end of BluN64 Configuration
+CONFIG_BBPCORE_PINOUT_TYPE_ORIGINAL=y
+# CONFIG_BBPCORE_PINOUT_TYPE_YAKARA is not set
+# end of bebopCORE Configuration
 
 #
 # BluControl SDK Configuration

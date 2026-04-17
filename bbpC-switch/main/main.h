@@ -8,6 +8,6 @@
 #include "hoja_includes.h"
 #include <string.h>
 
-#include "n64-pad.h"
+#include "bbpC-pad.h"
 
 #endif

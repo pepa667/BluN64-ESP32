@@ -1,4 +1,4 @@
-# First Build — n64-switch
+# First Build — bbpC-switch
 
 > **Built with the help of [GitHub Copilot](https://github.com/features/copilot)**
 
@@ -13,7 +13,7 @@
 
 ## Contexto
 
-Este documento registra todas as alterações realizadas para obter o primeiro build bem-sucedido do firmware **n64-switch** (ESP32 → Nintendo Switch via BLE) com o toolchain **ESP-IDF v5.4** e compilador **GCC 14.2.0 (xtensa-esp32-elf)**.
+Este documento registra todas as alterações realizadas para obter o primeiro build bem-sucedido do firmware **bbpC-switch** (ESP32 → Nintendo Switch via BLE) com o toolchain **ESP-IDF v5.4** e compilador **GCC 14.2.0 (xtensa-esp32-elf)**.
 
 O processo foi guiado pelo **GitHub Copilot**, que identificou e corrigiu automaticamente todos os erros de compilação em sequência.
 

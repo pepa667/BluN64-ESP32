@@ -1,13 +1,13 @@
 #include "main.h"
 
-BleGamepad bleGamepad("BluN64 Gamepad", "JPZV");
+BleGamepad bleGamepad("bebopCORE Gamepad", "Pépa");
 BleGamepadConfiguration bleGamepadConfig;
 
 TaskHandle_t loopTaskHandle = NULL;
 
 #define buttonsLength 6
 
-n64Button buttons[buttonsLength] =
+bbpCButton buttons[buttonsLength] =
 {
     {BUTTON_A_PIN,      BUTTON_1},
     {BUTTON_B_PIN,      BUTTON_4},
@@ -111,8 +111,8 @@ void app_loop(void *params)
                 btn_x_axis = 1;
 
             // Joystick
-            x_axis = n64_get_joystick_x();
-            y_axis = -n64_get_joystick_y();
+            x_axis = bbpC_get_joystick_x();
+            y_axis = -bbpC_get_joystick_y();
             
             // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
             if (abs(x_axis) <= 10)
@@ -145,10 +145,10 @@ void app_loop(void *params)
 
 extern "C" void app_main(void)
 {
-    printf("BlueN64 Control Generic Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
+    printf("BlueBBPC Control Generic Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
     blucontrol_mode_init(false);
-    n64_init();
+    bbpC_init();
 
     bleGamepadConfig.setAutoReport(false);
     bleGamepadConfig.setButtonCount(12);
@@ -161,5 +161,5 @@ extern "C" void app_main(void)
     xTaskCreatePinnedToCore(app_loop, "APP_LOOP", 4096, NULL, tskIDLE_PRIORITY, &loopTaskHandle, 1);
     configASSERT(loopTaskHandle);
 
-    printf("BlueN64 Control. Started!\n");
+    printf("BlueBBPC Control. Started!\n");
 }
