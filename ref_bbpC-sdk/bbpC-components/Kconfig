@@ -1,0 +1,16 @@
+menu "bebopCORE Configuration"
+
+    choice BBPCORE_PINOUT_TYPE
+        prompt "Pinout type"
+        default BBPCORE_PINOUT_TYPE_ORIGINAL
+        help
+            Select which pinout will you use. For reference, the original uses GPIO22 for Z, while Yakara's uses GPIO33
+
+        config BBPCORE_PINOUT_TYPE_ORIGINAL
+            bool "Original"
+
+        config BBPCORE_PINOUT_TYPE_YAKARA
+            bool "Yakara's"
+    endchoice
+
+endmenu

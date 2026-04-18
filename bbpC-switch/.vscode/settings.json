@@ -2,6 +2,8 @@
   "idf.portWin": "COM6",
   "idf.adapterTargetName": "esp32",
   "idf.flashType": "UART",
-  "idf.currentSetup": "/Users/pepa/.espressif/v5.5.3/esp-idf",
-  "C_Cpp.errorSquiggles": "disabled"
+  "idf.currentSetup": "/Users/pepa/esp/v6.0/esp-idf",
+  "C_Cpp.errorSquiggles": "disabled",
+  "idf.port": "/dev/tty.usbserial-1420",
+  "idf.openOcdConfigs": ["board/esp32-wrover-kit-3.3v.cfg"]
 }
