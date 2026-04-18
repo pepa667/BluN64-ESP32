@@ -21,7 +21,10 @@
                 ],
                 "limitSymbolsToIncludedHeaders": false
             },
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": [
+                "${workspaceFolder}/build/compile_commands.json"
+            ],
+            "compilerPath": "/usr/bin/gcc"
         }
     ],
     "version": 4
