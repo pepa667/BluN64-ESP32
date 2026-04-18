@@ -2,6 +2,9 @@
   "idf.portWin": "COM6",
   "idf.adapterTargetName": "esp32",
   "idf.flashType": "UART",
-  "idf.currentSetup": "/Users/pepa/esp/.espressif/v5.4/esp-idf",
-  "idf.openOcdConfigs": ["board/esp32-wrover-kit-1.8v.cfg"]
+  "idf.currentSetup": "/Users/pepa/esp/release-v5.4/esp-idf",
+  "idf.openOcdConfigs": ["board/esp32-wrover-kit-3.3v.cfg"],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32"
+  }
 }

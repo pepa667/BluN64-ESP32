@@ -1,5 +1,11 @@
 {
-    "idf.portWin": "COM6",
-    "idf.adapterTargetName": "esp32",
-    "idf.flashType": "UART"
+  "idf.portWin": "COM6",
+  "idf.adapterTargetName": "esp32",
+  "idf.flashType": "DFU",
+  "idf.currentSetup": "/Users/pepa/esp/.espressif/v5.4/esp-idf",
+  "idf.openOcdConfigs": ["board/esp32-wrover-kit-1.8v.cfg"],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32"
+  },
+  "idf.port": "/dev/tty.usbserial-1410"
 }

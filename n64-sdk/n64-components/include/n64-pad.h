@@ -78,10 +78,13 @@
 //     #define LED_MODE_PIN        GPIO_NUM_4
 // #endif
 
-// #define JOYSTICK_MAX_Y      40
-// #define JOYSTICK_MAX_X      40
 
-// #define JOYSTICK_ABS_MAX    2040
+    // Joystick (disabled - no encoder joystick on this board)
+    #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
+    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
+    #define JOYSTICK_DISABLED   1
 
 
     // Buttons
@@ -109,20 +112,31 @@
 
 
 
+
+#define JOYSTICK_MAX_Y      40
+#define JOYSTICK_MAX_X      40
+
+#define JOYSTICK_ABS_MAX    2040
+
 // Bit Masks
 // #define BUTTONS_BIT_MASK        ((1ULL<<BUTTON_A_PIN) | (1ULL<<BUTTON_B_PIN) | (1ULL<<DPAD_UP_PIN) | (1ULL<<DPAD_DOWN_PIN) | (1ULL<<DPAD_LEFT_PIN) | (1ULL<<DPAD_RIGHT_PIN) | (1ULL<<TRIGGER_L_PIN) | (1ULL<<TRIGGER_R_PIN) | (1ULL<<TRIGGER_Z_PIN) | (1ULL<<TRIGGER_ZR_PIN) | (1ULL<<BUTTON_START_PIN) | (1ULL<<BUTTON_HOME_PIN) | (1ULL<<C_UP_PIN) | (1ULL<<C_DOWN_PIN) | (1ULL<<C_LEFT_PIN) | (1ULL<<C_RIGHT_PIN))
-// #define JOYSTICK_Q_BIT_MASK     ((1ULL<<JOYSTICK_X_Q_PIN) | (1ULL<<JOYSTICK_Y_Q_PIN))
-// #define JOYSTICK_INT_BIT_MASK   ((1ULL<<JOYSTICK_X_INT_PIN) | (1ULL<<JOYSTICK_Y_INT_PIN))
+#ifndef JOYSTICK_DISABLED
+#define JOYSTICK_Q_BIT_MASK     ((1ULL<<JOYSTICK_X_Q_PIN) | (1ULL<<JOYSTICK_Y_Q_PIN))
+#define JOYSTICK_INT_BIT_MASK   ((1ULL<<JOYSTICK_X_INT_PIN) | (1ULL<<JOYSTICK_Y_INT_PIN))
+#else
+#define JOYSTICK_Q_BIT_MASK     0
+#define JOYSTICK_INT_BIT_MASK   0
+#endif
 
 // Flags
-// #define JOYSTICK_X_AXIS 0
-// #define JOYSTICK_Y_AXIS 1
+#define JOYSTICK_X_AXIS 0
+#define JOYSTICK_Y_AXIS 1
 
 #define MODE_SWITCH     1
 #define MODE_BLUERETRO  2
 
 void n64_init(void);
-// int n64_get_joystick_x(void);
-// int n64_get_joystick_y(void);
+int n64_get_joystick_x(void);
+int n64_get_joystick_y(void);
 
 #endif

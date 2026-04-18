@@ -1,0 +1,17 @@
+dependencies:
+  esp-nimble-cpp:
+    dependencies: []
+    source:
+      path: /Users/pepa/Desktop/BluN64-ESP32/n64-blueretro/components/esp-nimble-cpp
+      type: local
+    version: 3.0.0-dev
+  idf:
+    source:
+      type: idf
+    version: 5.4.4
+direct_dependencies:
+- h2zero/esp-nimble-cpp
+- idf
+manifest_hash: 9fccf534e3dfe76875c72a45aeb416d0866ccfcb1f78402e2571eeeaa0d8a91a
+target: esp32
+version: 2.0.0
