@@ -65,7 +65,7 @@ jobs:
       env:
         IDF_TOOLS_PATH : "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
     - name: Upload binary file
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v4
       with:
         name: BebopCORE-ESP32
         path: |
