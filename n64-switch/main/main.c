@@ -15,15 +15,15 @@ void button_task(hoja_button_data_s *button_data)
     button_data->dpad_right             |= !gpio_get_level(DPAD_RIGHT_PIN);
     
     // Triggers
-    button_data->trigger_zl             |= !gpio_get_level(TRIGGER_Z_PIN);
+    // button_data->trigger_zl             |= !gpio_get_level(TRIGGER_Z_PIN);
     //Uncomment the following line if you want to use a dedicated button for ZR instead of a combination (Experimental)
     //button_data->button_stick_left      |= !gpio_get_level(TRIGGER_ZR_PIN);
 
     // C-Buttons
-    button_data->trigger_l              |= !gpio_get_level(C_LEFT_PIN);
-    button_data->button_up              |= !gpio_get_level(C_UP_PIN);
-    button_data->button_right           |= !gpio_get_level(C_DOWN_PIN);
-    button_data->trigger_r              |= !gpio_get_level(C_RIGHT_PIN);
+    // button_data->button_up              |= !gpio_get_level(C_UP_PIN);
+    // button_data->button_right           |= !gpio_get_level(C_DOWN_PIN);
+    button_data->trigger_r              |= !gpio_get_level(TRIGGER_R_PIN);
+	button_data->button_select     		|= !gpio_get_level(BUTTON_SELECT_PIN);
 
     // MISC
     //Uncomment the following line if you want to use a dedicated button for Home instead of a combination (Experimental)
@@ -35,21 +35,21 @@ void button_task(hoja_button_data_s *button_data)
         ESP_LOGI("BluN64", "Start + L combo (Home)");
         button_data->button_home        |= 1; //Home
     }
-    else if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_R_PIN))
-    {
-        ESP_LOGI("BluN64", "Start + R combo (ZR)");
-        button_data->button_stick_left  |= 1; //ZR
-    }
+    // else if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_R_PIN))
+    // {
+    //     ESP_LOGI("BluN64", "Start + R combo (ZR)");
+    //     button_data->button_stick_left  |= 1; //ZR
+    // }
     else
     {
         //We should only check these buttons if it's not a combination
-        button_data->button_select      |= !gpio_get_level(TRIGGER_L_PIN);
-        button_data->trigger_zr         |= !gpio_get_level(TRIGGER_R_PIN);
+        // button_data->trigger_zr         |= !gpio_get_level(TRIGGER_R_PIN);
         button_data->button_start       |= !gpio_get_level(BUTTON_START_PIN);
+	    button_data->trigger_l              |= !gpio_get_level(TRIGGER_L_PIN);
 
         //We should also reset the combo buttons
         button_data->button_home        |= 0; //Home
-        button_data->button_stick_left  |= 0; //ZR
+        // button_data->button_stick_left  |= 0; //ZR
     }
 
     // NC
