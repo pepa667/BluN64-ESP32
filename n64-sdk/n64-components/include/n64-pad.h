@@ -8,74 +8,76 @@
 
 #if CONFIG_BLUN64_PINOUT_TYPE_ORIGINAL
     // Buttons
-    #define BUTTON_A_PIN        GPIO_NUM_27
-    #define BUTTON_B_PIN        GPIO_NUM_14
+    #define BUTTON_A_PIN        GPIO_NUM_25
+    #define BUTTON_B_PIN        GPIO_NUM_26
 
     // DPAD
-    #define DPAD_UP_PIN         GPIO_NUM_17
-    #define DPAD_DOWN_PIN       GPIO_NUM_15
-    #define DPAD_LEFT_PIN       GPIO_NUM_25
-    #define DPAD_RIGHT_PIN      GPIO_NUM_26
+    #define DPAD_UP_PIN         GPIO_NUM_12
+    #define DPAD_DOWN_PIN       GPIO_NUM_13
+    #define DPAD_LEFT_PIN       GPIO_NUM_14
+    #define DPAD_RIGHT_PIN      GPIO_NUM_27
 
     // Triggers
-    #define TRIGGER_L_PIN       GPIO_NUM_23
-    #define TRIGGER_R_PIN       GPIO_NUM_21
-    #define TRIGGER_Z_PIN       GPIO_NUM_22
-    #define TRIGGER_ZR_PIN      GPIO_NUM_4
+    #define TRIGGER_L_PIN       GPIO_NUM_19
+    #define TRIGGER_R_PIN       GPIO_NUM_23
+    #define TRIGGER_Z_PIN       GPIO_NUM_NC
+    #define TRIGGER_ZR_PIN      GPIO_NUM_NC
 
     // MISC
-    #define BUTTON_START_PIN    GPIO_NUM_18
-    #define BUTTON_HOME_PIN     GPIO_NUM_2
+    #define BUTTON_START_PIN    GPIO_NUM_32
+    #define BUTTON_SELECT_PIN    GPIO_NUM_33
+    #define BUTTON_HOME_PIN     GPIO_NUM_NC
 
     // C-Buttons
-    #define C_UP_PIN            GPIO_NUM_13
-    #define C_DOWN_PIN          GPIO_NUM_19
-    #define C_LEFT_PIN          GPIO_NUM_12
-    #define C_RIGHT_PIN         GPIO_NUM_5
+    #define C_UP_PIN            GPIO_NUM_NC
+    #define C_DOWN_PIN          GPIO_NUM_NC
+    #define C_LEFT_PIN          GPIO_NUM_NC
+    #define C_RIGHT_PIN         GPIO_NUM_NC
 
     // Joystick
-    #define JOYSTICK_X_INT_PIN  GPIO_NUM_35
-    #define JOYSTICK_X_Q_PIN    GPIO_NUM_34
-    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_32
-    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_33
+    #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
+    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
 
     // LEDs
-    #define LED_MODE_PIN        GPIO_NUM_16
+    #define LED_MODE_PIN        GPIO_NUM_NC
 #else
     // Buttons
-    #define BUTTON_A_PIN        GPIO_NUM_13
-    #define BUTTON_B_PIN        GPIO_NUM_27
+    #define BUTTON_A_PIN        GPIO_NUM_25
+    #define BUTTON_B_PIN        GPIO_NUM_26
 
     // DPAD
-    #define DPAD_UP_PIN         GPIO_NUM_21
-    #define DPAD_DOWN_PIN       GPIO_NUM_18
-    #define DPAD_LEFT_PIN       GPIO_NUM_19
-    #define DPAD_RIGHT_PIN      GPIO_NUM_22
+    #define DPAD_UP_PIN         GPIO_NUM_12
+    #define DPAD_DOWN_PIN       GPIO_NUM_13
+    #define DPAD_LEFT_PIN       GPIO_NUM_14
+    #define DPAD_RIGHT_PIN      GPIO_NUM_27
 
     // Triggers
-    #define TRIGGER_L_PIN       GPIO_NUM_23
-    #define TRIGGER_R_PIN       GPIO_NUM_32
-    #define TRIGGER_Z_PIN       GPIO_NUM_33
-    #define TRIGGER_ZR_PIN      GPIO_NUM_34
+    #define TRIGGER_L_PIN       GPIO_NUM_19
+    #define TRIGGER_R_PIN       GPIO_NUM_23
+    #define TRIGGER_Z_PIN       GPIO_NUM_NC
+    #define TRIGGER_ZR_PIN      GPIO_NUM_NC
 
     // MISC
-    #define BUTTON_START_PIN    GPIO_NUM_15
-    #define BUTTON_HOME_PIN     GPIO_NUM_35
+    #define BUTTON_START_PIN    GPIO_NUM_32
+    #define BUTTON_SELECT_PIN    GPIO_NUM_33
+    #define BUTTON_HOME_PIN     GPIO_NUM_NC
 
     // C-Buttons
-    #define C_UP_PIN            GPIO_NUM_25
-    #define C_DOWN_PIN          GPIO_NUM_12
-    #define C_LEFT_PIN          GPIO_NUM_26
-    #define C_RIGHT_PIN         GPIO_NUM_14
+    #define C_UP_PIN            GPIO_NUM_NC
+    #define C_DOWN_PIN          GPIO_NUM_NC
+    #define C_LEFT_PIN          GPIO_NUM_NC
+    #define C_RIGHT_PIN         GPIO_NUM_NC
 
     // Joystick
-    #define JOYSTICK_X_INT_PIN  GPIO_NUM_17
-    #define JOYSTICK_X_Q_PIN    GPIO_NUM_5
-    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_16
-    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_2
+    #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
+    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
+    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
 
     // LEDs
-    #define LED_MODE_PIN        GPIO_NUM_4
+
 #endif
 
 #define JOYSTICK_MAX_Y      40
