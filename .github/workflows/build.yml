@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "Clean" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "Clean" ]
 
 jobs:
   build:
@@ -19,14 +19,14 @@ jobs:
     - name: Set python3 default
       run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10 && alias pip=pip3
     - name: Clone Repository
-      run: git clone --recursive https://github.com/JPZV/BluN64-ESP32.git .
+      run: git clone --recursive https://github.com/pepa667/BebopCORE-ESP32.git .
     - name: Download ESP-IDF
       run: git clone --recursive --branch v5.0 https://github.com/espressif/esp-idf.git ./esp-idf
     - name: Install ESP-IDF
       working-directory: ./esp-idf
       run: sh ./install.sh
       env:
-        IDF_TOOLS_PATH : "/home/runner/work/BluN64-ESP32/BluN64-ESP32/tools"
+        IDF_TOOLS_PATH : "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
     - name: Preparing release Folder
       run: |
         mkdir tmp_files
@@ -42,7 +42,7 @@ jobs:
         mv build/bootloader/bootloader.bin ../tmp_files/bootloader.bin
         mv build/partition_table/partition-table.bin ../tmp_files/partition-table.bin
       env:
-        IDF_TOOLS_PATH : "/home/runner/work/BluN64-ESP32/BluN64-ESP32/tools"
+        IDF_TOOLS_PATH : "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
     - name: Build BlueRetro Mode with ESP-IDF
       working-directory: ./n64-blueretro
       run: |
@@ -50,7 +50,7 @@ jobs:
         idf.py build
         mv build/n64-control-blueretro.bin ../tmp_files/n64-control-blueretro.bin
       env:
-        IDF_TOOLS_PATH : "/home/runner/work/BluN64-ESP32/BluN64-ESP32/tools"
+        IDF_TOOLS_PATH : "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
     - name: Merge ready-to-flash binary file
       working-directory: ./tmp_files
       run: |
@@ -63,11 +63,11 @@ jobs:
                                       0x110000 n64-control-blueretro.bin
         mv BluN64.bin ../release/BluN64.bin
       env:
-        IDF_TOOLS_PATH : "/home/runner/work/BluN64-ESP32/BluN64-ESP32/tools"
+        IDF_TOOLS_PATH : "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
     - name: Upload binary file
       uses: actions/upload-artifact@v3.1.2
       with:
-        name: BluN64-ESP32
+        name: BebopCORE-ESP32
         path: |
           release/BluN64.bin
         if-no-files-found: error
