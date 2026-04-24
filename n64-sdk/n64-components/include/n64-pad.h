@@ -17,7 +17,15 @@
 #define TRIGGER_R_PIN       GPIO_NUM_23
 #define BUTTON_START_PIN    GPIO_NUM_32
 #define BUTTON_SELECT_PIN   GPIO_NUM_33
-#define BUTTON_HOME_PIN     0
+#define BUTTON_SHIFT_PIN     000
+#define BUTTON_PROFILE_PIN     000
+
+//LEDs for mode indication
+#define LED_POWER_PIN        000
+#define LED_SWITCH_PIN        000
+#define LED_POKEMON_PIN        000
+#define LED_RETROBLU_PIN        000
+#define LED_SHIFT_PIN        000
 
 // Bit Masks for button setup
 #define BUTTONS_BIT_MASK        ((1ULL<<BUTTON_A_PIN) | (1ULL<<BUTTON_B_PIN) | (1ULL<<DPAD_UP_PIN) | \

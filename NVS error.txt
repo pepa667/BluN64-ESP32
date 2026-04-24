@@ -1,0 +1,287 @@
+/Users/pepa/Desktop/bebopCORE/firmware/n64-switch/sdkconfig
+
+# CONFIG_BT_GATTC_CACHE_NVS_FLASH is not set
+
+CONFIG_ESP32_WIFI_NVS_ENABLED=y
+
+#
+# NVS
+#
+# CONFIG_NVS_ASSERT_ERROR_CHECK is not set
+# end of NVS
+
+# CONFIG_GATTC_CACHE_NVS_FLASH is not set
+
+
+
+
+/Users/pepa/Desktop/bebopCORE/firmware/n64-switch/components/HOJA-LIB-ESP32/CMakeLists.txt
+
+
+idf_component_register(
+    SRCS "hoja_frontend.c" "hoja_backend.c"
+"hoja_settings.c" "cores/switch/core_switch_spi.c" 
+"cores/switch/core_switch_reports.c" "cores/switch/core_switch_input.c"
+"cores/core_switch_backend.c" "cores/switch/core_switch_controller.c"
+"cores/switch/core_switch_comms.c" "cores/switch/core_switch_vibration.c"
+"cores/core_snes_backend.c" "cores/core_gamecube_backend.c"
+"utilities/util_joybus_rmt.c" "cores/core_usb_backend.c"
+"utilities/util_wired_detect.c" "utilities/util_battery.c"
+"utilities/util_common.c" "utilities/util_i2c.c"
+"utilities/util_gamepad.c" "resources/rsc_descriptors.c"
+"cores/core_bt_dinput.c" "cores/core_bt_xinput.c"
+"utilities/util_bt_hid.c" "esp_hid_gap.c"
+    INCLUDE_DIRS "include" "include/cores"
+    "include/resources" "include/utilities" "include/cores/switch"
+    REQUIRES "bt" "hal" "xtensa"
+    "riscv" "esp_rom" "driver" "esp_common" 
+    "soc" "esp_hw_support" "esp_system"
+    "newlib" "spi_flash" "log" "heap"
+    "freertos" "nvs_flash" "esp_hid")
+
+
+
+
+
+/Users/pepa/Desktop/bebopCORE/firmware/n64-switch/components/HOJA-LIB-ESP32/hoja_frontend.c
+
+hoja_err_t hoja_init()
+{
+...
+...
+...
+
+    // Initialize NVS
+    ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( ret );
+
+
+
+
+/Users/pepa/Desktop/bebopCORE/firmware/n64-switch/components/HOJA-LIB-ESP32/hoja_settings.c
+
+#include "hoja_settings.h"
+
+hoja_settings_s loaded_settings = {};
+
+hoja_err_t hoja_settings_init(void)
+{
+    nvs_handle_t my_handle;
+    const char* TAG = "hoja_settings_init";
+    esp_err_t err;
+
+    // Check if we have the magic byte
+
+    // Open storage
+    err = nvs_open(SETTINGS_NAMESPACE, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) 
+    {
+        ESP_LOGE(TAG, "During HOJA load settings, NVS Open failed.");
+        return HOJA_FAIL;
+    }
+
+    size_t required_size = 0;
+    err = nvs_get_blob(my_handle, "hoja_settings", NULL, &required_size);
+    if (err != ESP_OK && err != ESP_ERR_NVS_NOT_FOUND) return HOJA_FAIL;
+
+    ESP_LOGI(TAG, "Required size: %d", required_size);
+
+    if (required_size > 0)
+    {
+        err = nvs_get_blob(my_handle, "hoja_settings", &loaded_settings, &required_size);
+        if (err != ESP_OK)
+        {   
+            ESP_LOGE(TAG, "Could not load settings. 0x%08X", (unsigned int) loaded_settings.magic_bytes);
+            return HOJA_FAIL;
+        }
+        if (loaded_settings.magic_bytes != SETTINGS_MAGIC)
+        {
+            ESP_LOGI(TAG, "Settings magic bytes don't match. Setting to default...");
+            nvs_close(my_handle);
+
+            if (hoja_settings_default()) return HOJA_OK;
+        }
+        else
+        {
+            ESP_LOGI(TAG, "Settings loaded with magic byte 0x%08X", (unsigned int) loaded_settings.magic_bytes);
+            hoja_remaps.val = loaded_settings.button_remaps;
+            nvs_close(my_handle);
+        }
+        
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Settings unset. Set defaults...");
+        // We need to set/save all the appropriate settings.
+        nvs_close(my_handle);
+
+        if (hoja_settings_default()) return HOJA_OK;
+    }
+
+    ESP_LOGI(TAG, "HOJA Settings initialized OK.");
+    return HOJA_OK;
+}
+
+// Save all settings
+hoja_err_t hoja_settings_saveall(void)
+{
+    const char* TAG = "hoja_settings_saveall";
+    nvs_handle_t my_handle;
+    esp_err_t err;
+    // Open
+    err = nvs_open(SETTINGS_NAMESPACE, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) 
+    {
+        ESP_LOGE(TAG, "During HOJA settings save, NVS storage failed to open.");
+        return HOJA_FAIL;
+    }
+
+    nvs_set_blob(my_handle, "hoja_settings", &loaded_settings, sizeof(loaded_settings));
+
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
+
+    return HOJA_OK;
+}
+
+// Sets all settings to default.
+hoja_err_t hoja_settings_default(void)
+{
+    const char* TAG = "hoja_settings_default";
+    nvs_handle_t my_handle;
+    esp_err_t err;
+    ESP_LOGI(TAG, "Setting defaults...");
+
+    // Open
+    err = nvs_open(SETTINGS_NAMESPACE, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) 
+    {
+        ESP_LOGE(TAG, "Error when opening NVS storage for HOJA Settings.");
+        return HOJA_FAIL;
+    }
+
+    loaded_settings.magic_bytes = SETTINGS_MAGIC;
+
+    loaded_settings.controller_mode = HOJA_CONTROLLER_MODE_RETRO;
+
+    // Nintendo Switch Core stuff
+    memset(loaded_settings.ns_host_bt_address, 0, 6);
+    hoja_settings_generate_btmac(loaded_settings.ns_client_bt_address);
+    loaded_settings.ns_controller_paired = false;
+    loaded_settings.ns_controller_type = NS_TYPE_PROCON;
+
+    // Generate bt mac address for DInput
+    hoja_settings_generate_btmac(loaded_settings.dinput_client_bt_address);
+
+    // Generate bt mac address for XInput
+    hoja_settings_generate_btmac(loaded_settings.xinput_client_bt_address);
+
+    // Default color greenish
+    loaded_settings.color_r = 0xFF;
+    loaded_settings.color_g = 0xFF;
+    loaded_settings.color_b = 0xFF;
+
+    loaded_settings.sx_min = 0xFA;
+    loaded_settings.sx_center = 0x740;
+    loaded_settings.sx_max = 0xF47;
+
+    loaded_settings.sy_min = 0xFA;
+    loaded_settings.sy_center = 0x740;
+    loaded_settings.sy_max = 0xF47;
+
+    loaded_settings.cx_min = 0xFA;
+    loaded_settings.cx_center = 0x740;
+    loaded_settings.cx_max = 0xF47;
+
+    loaded_settings.cy_min = 0xFA;
+    loaded_settings.cy_center = 0x740;
+    loaded_settings.cy_max = 0xF47;
+
+    button_remap_s default_hoja_remaps = {
+        .dpad_up    = MAPCODE_DUP,
+        .dpad_down  = MAPCODE_DDOWN,
+        .dpad_left  = MAPCODE_DLEFT,
+        .dpad_right = MAPCODE_DRIGHT,
+
+        .button_up      = MAPCODE_B_UP,
+        .button_down    = MAPCODE_B_DOWN,
+        .button_left    = MAPCODE_B_LEFT,
+        .button_right   = MAPCODE_B_RIGHT,
+
+        .trigger_l      = MAPCODE_T_L,
+        .trigger_zl     = MAPCODE_T_ZL,
+        .trigger_r      = MAPCODE_T_R,
+        .trigger_zr     = MAPCODE_T_ZR,
+
+        .button_start       = MAPCODE_B_START,
+        .button_select      = MAPCODE_B_SELECT,
+        .button_stick_left  = MAPCODE_B_STICKL,
+        .button_stick_right = MAPCODE_B_STICKR,
+    };
+
+    loaded_settings.button_remaps = default_hoja_remaps.val;
+    hoja_remaps.val = default_hoja_remaps.val;
+
+    // Set blob
+    nvs_set_blob(my_handle, "hoja_settings", &loaded_settings, sizeof(hoja_settings_s));
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
+
+    return HOJA_OK;
+}
+
+
+
+
+
+
+/Users/pepa/Desktop/bebopCORE/firmware/n64-switch/components/HOJA-LIB-ESP32/include/hoja_includes.h
+
+#ifndef HOJA_INCLUDES_H
+#define HOJA_INCLUDES_H
+
+#define HOJA_INPUT_CPU 1
+#define HOJA_CORE_CPU 0
+
+#include <string.h>
+#include <stdbool.h>
+#include <inttypes.h>
+#include <stddef.h>
+#include <assert.h>
+#include <stdint.h>
+
+#include "sdkconfig.h"
+
+#include <hal/clk_gate_ll.h>
+#include <hal/rmt_ll.h>
+#include <esp32/rom/ets_sys.h>
+#include <esp_cpu.h>
+
+
+// Bluetooth Stuff
+
+// New HID api
+#include "esp_hid_common.h"
+#include "esp_hidd.h"
+
+#include "esp_hidd_api.h"
+#include "esp_bt_main.h"
+#include "esp_bt_device.h"
+#include "esp_bt.h"
+#include "esp_bt_defs.h"
+#include "esp_gap_bt_api.h"
+#include "esp_gap_ble_api.h"
+
+#include "esp_system.h"
+#include "esp_mac.h"
+#include "esp_random.h"
+
+#include "esp_timer.h"
+#include "esp_sleep.h"
+
+#include "nvs.h"
+#include "nvs_flash.h"
