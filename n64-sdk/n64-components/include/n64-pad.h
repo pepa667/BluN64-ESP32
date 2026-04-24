@@ -20,28 +20,28 @@
     // Triggers
     #define TRIGGER_L_PIN       GPIO_NUM_19
     #define TRIGGER_R_PIN       GPIO_NUM_23
-    #define TRIGGER_Z_PIN       GPIO_NUM_NC
-    #define TRIGGER_ZR_PIN      GPIO_NUM_NC
+    // #define TRIGGER_Z_PIN       GPIO_NUM_NC
+    // #define TRIGGER_ZR_PIN      GPIO_NUM_NC
 
     // MISC
     #define BUTTON_START_PIN    GPIO_NUM_32
     #define BUTTON_SELECT_PIN    GPIO_NUM_33
-    #define BUTTON_HOME_PIN     GPIO_NUM_NC
+    #define BUTTON_HOME_PIN     0
 
     // C-Buttons
-    #define C_UP_PIN            GPIO_NUM_NC
-    #define C_DOWN_PIN          GPIO_NUM_NC
-    #define C_LEFT_PIN          GPIO_NUM_NC
-    #define C_RIGHT_PIN         GPIO_NUM_NC
+    // #define C_UP_PIN            GPIO_NUM_NC
+    // #define C_DOWN_PIN          GPIO_NUM_NC
+    // #define C_LEFT_PIN          GPIO_NUM_NC
+    // #define C_RIGHT_PIN         GPIO_NUM_NC
 
-    // Joystick
-    #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
-    #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
-    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
-    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
+    // // Joystick
+    #define JOYSTICK_X_INT_PIN  0
+    #define JOYSTICK_X_Q_PIN    0
+    #define JOYSTICK_Y_INT_PIN  0
+    #define JOYSTICK_Y_Q_PIN    0
 
     // LEDs
-    #define LED_MODE_PIN        GPIO_NUM_NC
+    // #define LED_MODE_PIN        GPIO_NUM_NC
 #else
     // Buttons
     #define BUTTON_A_PIN        GPIO_NUM_25
@@ -56,25 +56,25 @@
     // Triggers
     #define TRIGGER_L_PIN       GPIO_NUM_19
     #define TRIGGER_R_PIN       GPIO_NUM_23
-    #define TRIGGER_Z_PIN       GPIO_NUM_NC
-    #define TRIGGER_ZR_PIN      GPIO_NUM_NC
+    // #define TRIGGER_Z_PIN       GPIO_NUM_NC
+    // #define TRIGGER_ZR_PIN      GPIO_NUM_NC
 
     // MISC
     #define BUTTON_START_PIN    GPIO_NUM_32
     #define BUTTON_SELECT_PIN    GPIO_NUM_33
-    #define BUTTON_HOME_PIN     GPIO_NUM_NC
+    #define BUTTON_HOME_PIN     0
 
     // C-Buttons
-    #define C_UP_PIN            GPIO_NUM_NC
-    #define C_DOWN_PIN          GPIO_NUM_NC
-    #define C_LEFT_PIN          GPIO_NUM_NC
-    #define C_RIGHT_PIN         GPIO_NUM_NC
+    // #define C_UP_PIN            GPIO_NUM_NC
+    // #define C_DOWN_PIN          GPIO_NUM_NC
+    // #define C_LEFT_PIN          GPIO_NUM_NC
+    // #define C_RIGHT_PIN         GPIO_NUM_NC
 
     // Joystick
-    #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
-    #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
-    #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
-    #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
+    // #define JOYSTICK_X_INT_PIN  GPIO_NUM_NC
+    // #define JOYSTICK_X_Q_PIN    GPIO_NUM_NC
+    // #define JOYSTICK_Y_INT_PIN  GPIO_NUM_NC
+    // #define JOYSTICK_Y_Q_PIN    GPIO_NUM_NC
 
     // LEDs
 
