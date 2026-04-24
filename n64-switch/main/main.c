@@ -36,25 +36,25 @@ void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
     }
 }
 
-void stick_task(hoja_analog_data_s* analog_data)
-{
-    // Joystick
-    int x_data = 0;
-    int y_data = 0;
+// void stick_task(hoja_analog_data_s* analog_data)
+// {
+//     // Joystick
+//     int x_data = 0;
+//     int y_data = 0;
 	
     
-    analog_data->ls_x = 0;
-    analog_data->ls_y = 0;
+//     analog_data->ls_x = 0;
+//     analog_data->ls_y = 0;
 
-    return;
-}
+//     return;
+// }
 
 void app_main(void)
 {
     printf("BlueN64 Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
     hoja_register_button_callback(button_task);
-    hoja_register_analog_callback(stick_task);
+    // hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);
 
     blucontrol_mode_init(false);
