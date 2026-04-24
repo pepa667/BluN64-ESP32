@@ -8,11 +8,9 @@ jobs:
     runs-on: self-hosted # <--- MUDE ISSO AQUI
     env:
       # Isso redireciona o cache de ferramentas para dentro da pasta do runner
-      AGENT_TOOLSDIRECTORY: ${{ github.workspace }}/_tool_cache 
+      AGENT_TOOLSDIRECTORY: ${{ github.workspace }}/_tool_cache
     steps:
       - uses: actions/checkout@v4
-
-    steps:
       - name: Set up Python 3.8
         uses: actions/setup-python@v5
         with:
