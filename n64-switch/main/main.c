@@ -50,7 +50,7 @@ void app_main(void)
 
     hoja_init();
     hoja_set_core(HOJA_CORE_NS);
-    core_ns_set_subcore(NS_TYPE_FC);
+    core_ns_set_subcore(NS_TYPE_N64);
 
     while(hoja_start_core() != HOJA_OK)
     {
