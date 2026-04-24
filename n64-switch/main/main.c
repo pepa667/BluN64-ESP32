@@ -53,7 +53,7 @@ void button_task(hoja_button_data_s *button_data)
     }
 
     // NC
-    button_data->button_stick_right     = 0;
+    // button_data->button_stick_right     = 0;
 }
 
 void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
@@ -72,22 +72,24 @@ void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 void stick_task(hoja_analog_data_s* analog_data)
 {
     // Joystick
-    int x_data = n64_get_joystick_x();
-    int y_data = n64_get_joystick_y();
+    // int x_data = n64_get_joystick_x();
+    // int y_data = n64_get_joystick_y();
 	
-    // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
-    if (abs(x_data) <= 10)
-    {
-        x_data = 0;
-    }
+    // // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
+    // if (abs(x_data) <= 10)
+    // {
+    //     x_data = 0;
+    // }
     
-    if (abs(y_data) <= 10)
-    {
-        y_data = 0;
-    }
+    // if (abs(y_data) <= 10)
+    // {
+    //     y_data = 0;
+    // }
     
-    analog_data->ls_x = (x_data + JOYSTICK_MAX_X) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_X;
-    analog_data->ls_y = (y_data + JOYSTICK_MAX_Y) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_Y;
+    // analog_data->ls_x = (x_data + JOYSTICK_MAX_X) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_X;
+    // analog_data->ls_y = (y_data + JOYSTICK_MAX_Y) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_Y;
+    analog_data->ls_x = 0;
+    analog_data->ls_y = 0;
 
     return;
 }
@@ -97,7 +99,7 @@ void app_main(void)
     printf("BlueN64 Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
     hoja_register_button_callback(button_task);
-    hoja_register_analog_callback(stick_task);
+    // hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);
 
     blucontrol_mode_init(false);
@@ -105,7 +107,7 @@ void app_main(void)
 
     hoja_init();
     hoja_set_core(HOJA_CORE_NS);
-    core_ns_set_subcore(NS_TYPE_N64);
+    core_ns_set_subcore(NS_TYPE_FC);
 
     while(hoja_start_core() != HOJA_OK)
     {
