@@ -98,6 +98,13 @@ void app_main(void)
 {
     printf("BlueN64 Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+
     hoja_register_button_callback(button_task);
     // hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);

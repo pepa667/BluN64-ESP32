@@ -6,6 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "hoja_includes.h"
+#include "nvs_flash.h"
 #include <string.h>
 
 #include "n64-pad.h"
