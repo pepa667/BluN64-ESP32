@@ -1,3 +1,9 @@
+# Project archived in favor of BluControl
+
+This project was archived in favor of [BluControl](https://github.com/JPZV/BluControl-ESP32/), which is config based and compatible with many types of controls.
+
+---
+
 # BluN64-ESP32
 
 This is a project to emulate a N64 controller as a modern one with ESP32. It works with (almost) any ESP32 and with any original N64 controller (from the original console, not the Switch one).
