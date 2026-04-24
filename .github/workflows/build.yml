@@ -1,11 +1,11 @@
 name: Build
 
 on:
-runs-on: self-hosted
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Set up Python 3.8
