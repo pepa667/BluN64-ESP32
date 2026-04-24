@@ -1,12 +1,12 @@
 #include "n64-pad.h"
 
-int joystick_x_value = 0;
-int joystick_y_value = 0;
+// int joystick_x_value = 0;
+// int joystick_y_value = 0;
 
-void joystick_interrupt_handler(void *params)
-{
-    switch ((int)params)
-    {
+// void joystick_interrupt_handler(void *params)
+// {
+//     switch ((int)params)
+//     {
         // default:
         // case JOYSTICK_X_AXIS:
         //     if (gpio_get_level(JOYSTICK_X_INT_PIN) == gpio_get_level(JOYSTICK_X_Q_PIN))
@@ -48,8 +48,8 @@ void joystick_interrupt_handler(void *params)
         //         joystick_y_value = JOYSTICK_MAX_Y;   
         //     }
         //     break;
-    }
-}
+//     }
+// }
 
 void n64_init(void)
 {
@@ -61,28 +61,28 @@ void n64_init(void)
     io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
     gpio_config(&io_conf);
 
-    io_conf.intr_type = GPIO_INTR_DISABLE;
-    io_conf.pin_bit_mask = JOYSTICK_Q_BIT_MASK;
-    io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
-    gpio_config(&io_conf);
+    // io_conf.intr_type = GPIO_INTR_DISABLE;
+    // io_conf.pin_bit_mask = JOYSTICK_Q_BIT_MASK;
+    // io_conf.mode = GPIO_MODE_INPUT;
+    // io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+    // gpio_config(&io_conf);
 
-    io_conf.intr_type = GPIO_INTR_ANYEDGE;
-    io_conf.pin_bit_mask = JOYSTICK_INT_BIT_MASK;
-    io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+    // io_conf.intr_type = GPIO_INTR_ANYEDGE;
+    // io_conf.pin_bit_mask = JOYSTICK_INT_BIT_MASK;
+    // io_conf.mode = GPIO_MODE_INPUT;
+    // io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
     gpio_config(&io_conf);
 
     ESP_ERROR_CHECK(gpio_install_isr_service(0));
-    ESP_ERROR_CHECK(gpio_isr_handler_add(JOYSTICK_X_INT_PIN, joystick_interrupt_handler, (void *)JOYSTICK_X_AXIS));
-    ESP_ERROR_CHECK(gpio_isr_handler_add(JOYSTICK_Y_INT_PIN, joystick_interrupt_handler, (void *)JOYSTICK_Y_AXIS));
+    // ESP_ERROR_CHECK(gpio_isr_handler_add(JOYSTICK_X_INT_PIN, joystick_interrupt_handler, (void *)JOYSTICK_X_AXIS));
+    // ESP_ERROR_CHECK(gpio_isr_handler_add(JOYSTICK_Y_INT_PIN, joystick_interrupt_handler, (void *)JOYSTICK_Y_AXIS));
 }
 
-int n64_get_joystick_x(void)
-{
-    return joystick_x_value;
-}
-int n64_get_joystick_y(void)
-{
-    return joystick_y_value;
-}
+// int n64_get_joystick_x(void)
+// {
+//     return joystick_x_value;
+// }
+// int n64_get_joystick_y(void)
+// {
+//     return joystick_y_value;
+// }
