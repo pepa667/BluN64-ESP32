@@ -5,56 +5,65 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted # <--- MUDE ISSO AQUI
+    runs-on: self-hosted
     env:
-      # Isso redireciona o cache de ferramentas para dentro da pasta do runner
-      AGENT_TOOLSDIRECTORY: ${{ github.workspace }}/_tool_cache
+      # Ajustando caminhos para o seu usuário no macOS
+      HOME: /Users/pepa
+      # Onde o ESP-IDF guardará as ferramentas no seu Mac
+      IDF_TOOLS_PATH: /Users/pepa/esp-idf-tools
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive # Já clona submodulos automaticamente
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v5
         with:
           python-version: "3.8"
-      - name: Install ESP-IDF prerequisite
+
+      - name: Install ESP-IDF prerequisite (macOS)
         run: |
-          sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu `lsb_release -sc` main universe restricted multiverse"
-          sudo apt-get update -y -qq
-          sudo apt-get install git wget flex bison gperf python3 python3-pip python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util
-      - name: Set python3 default
-        run: sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10 && alias pip=pip3
-      - name: Clone Repository
-        run: git clone --recursive https://github.com/pepa667/BebopCORE-ESP32.git .
+          # No Mac usamos brew, não apt-get
+          brew install cmake ninja d-bus ccache dfu-util wget
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pyserial
+
       - name: Download ESP-IDF
-        run: git clone --recursive --branch v5.0 https://github.com/espressif/esp-idf.git ./esp-idf
+        run: |
+          # Evita baixar se já existir para poupar banda no seu Mac
+          if [ ! -d "esp-idf" ]; then
+            git clone --recursive --branch v5.0 https://github.com/espressif/esp-idf.git ./esp-idf
+          fi
+
       - name: Install ESP-IDF
         working-directory: ./esp-idf
-        run: sh ./install.sh
-        env:
-          IDF_TOOLS_PATH: "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
+        run: |
+          # Criando a pasta do tools_path antes
+          mkdir -p $IDF_TOOLS_PATH
+          sh ./install.sh esp32
+
       - name: Preparing release Folder
         run: |
-          mkdir tmp_files
-          mkdir release
-          mkdir release/update
+          mkdir -p tmp_files
+          mkdir -p release/update
+
       - name: Build Switch Mode with ESP-IDF
         working-directory: ./n64-switch
         run: |
           . ../esp-idf/export.sh
           idf.py build
-          mv build/n64-control-switch.bin ../tmp_files/n64-control-switch.bin
-          mv build/ota_data_initial.bin ../tmp_files/ota_data_initial.bin
-          mv build/bootloader/bootloader.bin ../tmp_files/bootloader.bin
-          mv build/partition_table/partition-table.bin ../tmp_files/partition-table.bin
-        env:
-          IDF_TOOLS_PATH: "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
+          cp build/n64-control-switch.bin ../tmp_files/
+          cp build/ota_data_initial.bin ../tmp_files/
+          cp build/bootloader/bootloader.bin ../tmp_files/
+          cp build/partition_table/partition-table.bin ../tmp_files/
+
       - name: Build BlueRetro Mode with ESP-IDF
         working-directory: ./n64-blueretro
         run: |
           . ../esp-idf/export.sh
           idf.py build
-          mv build/n64-control-blueretro.bin ../tmp_files/n64-control-blueretro.bin
-        env:
-          IDF_TOOLS_PATH: "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
+          cp build/n64-control-blueretro.bin ../tmp_files/
+
       - name: Merge ready-to-flash binary file
         working-directory: ./tmp_files
         run: |
@@ -66,12 +75,10 @@ jobs:
                                         0x10000 n64-control-switch.bin \
                                         0x110000 n64-control-blueretro.bin
           mv BluN64.bin ../release/BluN64.bin
-        env:
-          IDF_TOOLS_PATH: "/home/runner/work/BebopCORE-ESP32/BebopCORE-ESP32/tools"
+
       - name: Upload binary file
         uses: actions/upload-artifact@v4
         with:
           name: BebopCORE-ESP32
-          path: |
-            release/BluN64.bin
+          path: release/BluN64.bin
           if-no-files-found: error
