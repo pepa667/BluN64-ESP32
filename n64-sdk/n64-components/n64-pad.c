@@ -7,47 +7,47 @@ void joystick_interrupt_handler(void *params)
 {
     switch ((int)params)
     {
-        default:
-        case JOYSTICK_X_AXIS:
-            if (gpio_get_level(JOYSTICK_X_INT_PIN) == gpio_get_level(JOYSTICK_X_Q_PIN))
-            {
-                joystick_x_value--;
-            }
-            else
-            {
-                joystick_x_value++;
-            }
+        // default:
+        // case JOYSTICK_X_AXIS:
+        //     if (gpio_get_level(JOYSTICK_X_INT_PIN) == gpio_get_level(JOYSTICK_X_Q_PIN))
+        //     {
+        //         joystick_x_value--;
+        //     }
+        //     else
+        //     {
+        //         joystick_x_value++;
+        //     }
 
-            //Capping X to -40 <= X <= 40
-            if (joystick_x_value < 0 && joystick_x_value < -JOYSTICK_MAX_X)
-            {
-                joystick_x_value = -JOYSTICK_MAX_X;
-            }
-            else if (joystick_x_value > 0 && joystick_x_value > JOYSTICK_MAX_X)
-            {
-                joystick_x_value = JOYSTICK_MAX_X;   
-            }
-            break;
-        case JOYSTICK_Y_AXIS:
-            if (gpio_get_level(JOYSTICK_Y_INT_PIN) == gpio_get_level(JOYSTICK_Y_Q_PIN))
-            {
-                joystick_y_value--;
-            }
-            else
-            {
-                joystick_y_value++;
-            }
+        //     //Capping X to -40 <= X <= 40
+        //     if (joystick_x_value < 0 && joystick_x_value < -JOYSTICK_MAX_X)
+        //     {
+        //         joystick_x_value = -JOYSTICK_MAX_X;
+        //     }
+        //     else if (joystick_x_value > 0 && joystick_x_value > JOYSTICK_MAX_X)
+        //     {
+        //         joystick_x_value = JOYSTICK_MAX_X;   
+        //     }
+        //     break;
+        // case JOYSTICK_Y_AXIS:
+        //     if (gpio_get_level(JOYSTICK_Y_INT_PIN) == gpio_get_level(JOYSTICK_Y_Q_PIN))
+        //     {
+        //         joystick_y_value--;
+        //     }
+        //     else
+        //     {
+        //         joystick_y_value++;
+        //     }
             
-            //Capping Y to -40 <= Y <= 40
-            if (joystick_y_value < 0 && joystick_y_value < -JOYSTICK_MAX_Y)
-            {
-                joystick_y_value = -JOYSTICK_MAX_Y;
-            }
-            else if (joystick_y_value > 0 && joystick_y_value > JOYSTICK_MAX_Y)
-            {
-                joystick_y_value = JOYSTICK_MAX_Y;   
-            }
-            break;
+        //     //Capping Y to -40 <= Y <= 40
+        //     if (joystick_y_value < 0 && joystick_y_value < -JOYSTICK_MAX_Y)
+        //     {
+        //         joystick_y_value = -JOYSTICK_MAX_Y;
+        //     }
+        //     else if (joystick_y_value > 0 && joystick_y_value > JOYSTICK_MAX_Y)
+        //     {
+        //         joystick_y_value = JOYSTICK_MAX_Y;   
+        //     }
+        //     break;
     }
 }
 
