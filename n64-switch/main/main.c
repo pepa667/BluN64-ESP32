@@ -1,116 +1,96 @@
 #include "main.h"
+#include "driver/gpio.h" // Necessário para ler os pinos
 
 void button_task(hoja_button_data_s *button_data)
 {
-    // Buttons
-    //   A
-    button_data->button_down            |= !gpio_get_level(BUTTON_A_PIN);
-    //   B
-    button_data->button_left            |= !gpio_get_level(BUTTON_B_PIN);
+    // Lê o estado do nosso botão SHIFT (GPIO 39)
+    // Como tem pull-up externo, LOW (0) = Pressionado
+    bool shift_active = !gpio_get_level(39); 
 
-    // Dpad
-    button_data->dpad_up                |= !gpio_get_level(DPAD_UP_PIN);
-    button_data->dpad_down              |= !gpio_get_level(DPAD_DOWN_PIN);
-    button_data->dpad_left              |= !gpio_get_level(DPAD_LEFT_PIN);
-    button_data->dpad_right             |= !gpio_get_level(DPAD_RIGHT_PIN);
-    
-    // Triggers
-    button_data->trigger_zl             |= !gpio_get_level(TRIGGER_Z_PIN);
-    //Uncomment the following line if you want to use a dedicated button for ZR instead of a combination (Experimental)
-    //button_data->button_stick_left      |= !gpio_get_level(TRIGGER_ZR_PIN);
+    // --- DIRECIONAL (Arcade Stick Digital) ---
+    // button_data->dpad_up    |= !gpio_get_level(21);
+    // button_data->dpad_down  |= !gpio_get_level(13);
+    // button_data->dpad_left  |= !gpio_get_level(14);
+    // button_data->dpad_right |= !gpio_get_level(27);
 
-    // C-Buttons
-    button_data->trigger_l              |= !gpio_get_level(C_LEFT_PIN);
-    button_data->button_up              |= !gpio_get_level(C_UP_PIN);
-    button_data->button_right           |= !gpio_get_level(C_DOWN_PIN);
-    button_data->trigger_r              |= !gpio_get_level(C_RIGHT_PIN);
-
-    // MISC
-    //Uncomment the following line if you want to use a dedicated button for Home instead of a combination (Experimental)
-    //button_data->button_home            |= !gpio_get_level(BUTTON_HOME_PIN);
-
-    // Combinations
-    if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_L_PIN))
-    {
-        ESP_LOGI("BluN64", "Start + L combo (Home)");
-        button_data->button_home        |= 1; //Home
-    }
-    else if (!gpio_get_level(BUTTON_START_PIN) && !gpio_get_level(TRIGGER_R_PIN))
-    {
-        ESP_LOGI("BluN64", "Start + R combo (ZR)");
-        button_data->button_stick_left  |= 1; //ZR
-    }
-    else
-    {
-        //We should only check these buttons if it's not a combination
-        button_data->button_select      |= !gpio_get_level(TRIGGER_L_PIN);
-        button_data->trigger_zr         |= !gpio_get_level(TRIGGER_R_PIN);
-        button_data->button_start       |= !gpio_get_level(BUTTON_START_PIN);
-
-        //We should also reset the combo buttons
-        button_data->button_home        |= 0; //Home
-        button_data->button_stick_left  |= 0; //ZR
+    // --- LÓGICA DO SHIFT (Layers) ---
+    if (shift_active) {
+        // LAYER 2 (Shift Segurado)
+        // A vira X, B vira Y, Start vira Home, Select vira Sync
+        button_data->button_up    |= !gpio_get_level(25); // A fisico dispara X
+        button_data->button_left  |= !gpio_get_level(26); // B fisico dispara Y
+        button_data->button_home  |= !gpio_get_level(32); // Start fisico dispara Home
+        
+        // Se quiser usar Select como Screenshot no Layer 2:
+        // button_data->button_minus |= !gpio_get_level(33); 
+    } else {
+        // LAYER 1 (Normal)
+        button_data->button_right       |= !gpio_get_level(25);
+        button_data->button_down        |= !gpio_get_level(26);
+        button_data->button_start       |= !gpio_get_level(32); // Start -> Start
+        button_data->button_select      |= !gpio_get_level(33); // Select -> Select
     }
 
-    // NC
-    button_data->button_stick_right     = 0;
+    // --- GATILHOS (Sempre iguais) ---
+    button_data->trigger_l |= !gpio_get_level(19);
+    button_data->trigger_r |= !gpio_get_level(23);
 }
 
 void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 {
-    printf("BlueN64 Control Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
-    if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECT)
+    printf("bebopCORE Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
+    if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECTED)
     {
-        //This shouldn't be needed, but HOJA glitches after disconnecting the Switch... so... ¯\_(ツ)_/¯
         esp_restart();
     }
 }
 
-// Separate task to read sticks.
-// This is essential to have as a separate component as ADC scans typically take more time and this is only
-// scanned once between each polling interval. This varies from core to core.
 void stick_task(hoja_analog_data_s* analog_data)
 {
-    // Joystick
-    int x_data = n64_get_joystick_x();
-    int y_data = n64_get_joystick_y();
-	
-    // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
-    if (abs(x_data) <= 10)
-    {
-        x_data = 0;
-    }
-    
-    if (abs(y_data) <= 10)
-    {
-        y_data = 0;
-    }
-    
-    analog_data->ls_x = (x_data + JOYSTICK_MAX_X) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_X;
-    analog_data->ls_y = (y_data + JOYSTICK_MAX_Y) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_Y;
+    // Começamos no centro (Neutro)
+    analog_data->ls_x = 1020;
+    analog_data->ls_y = 1020;
 
-    return;
+    // Eixo X (Esquerda / Direita)
+    if (!gpio_get_level(27)) { // RIGHT_PIN
+        analog_data->ls_x = 2040;
+    } else if (!gpio_get_level(14)) { // LEFT_PIN
+        analog_data->ls_x = 0;
+    }
+
+    // Eixo Y (Cima / Baixo)
+    // No Switch, UP costuma ser o valor máximo (2040)
+    if (!gpio_get_level(21)) { // UP_PIN
+        analog_data->ls_y = 2040;
+    } else if (!gpio_get_level(13)) { // DOWN_PIN
+        analog_data->ls_y = 0;
+    }
 }
 
 void app_main(void)
 {
-    printf("BlueN64 Control Switch Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
+    printf("bebopCORE Arcade Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
+    // 1. A ORDEM CERTA DA NVS (Mata o erro 0x2)
+    hoja_init();
+
+    // 2. Registra os callbacks 
+    // (Não registramos o analógico porque o arcade é digital)
     hoja_register_button_callback(button_task);
     hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);
 
-    blucontrol_mode_init(false);
-    n64_init();
-
-    hoja_init();
+    // 3. Configura o Core
     hoja_set_core(HOJA_CORE_NS);
-    core_ns_set_subcore(NS_TYPE_N64);
+    
+    // Mudamos para PROCON para compatibilidade total no Switch
+    core_ns_set_subcore(NS_TYPE_PROCON); 
 
+    // 4. Inicia
     while(hoja_start_core() != HOJA_OK)
     {
         vTaskDelay(100 / portTICK_PERIOD_MS);
-        printf("BlueN64 Control. Retrying...\n");
+        printf("bebopCORE. Retrying...\n");
     }
-    printf("BlueN64 Control. Switch Connected!\n");
+    printf("bebopCORE. Switch Connected!\n");
 }
