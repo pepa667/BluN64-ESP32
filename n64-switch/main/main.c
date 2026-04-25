@@ -1,43 +1,52 @@
 #include "main.h"
-#include "driver/gpio.h" // Necessário para ler os pinos
 
-void button_task(hoja_button_data_s *button_data)
+static bool g_shift_active = false;
+
+void button_task(void)
 {
-    // Lê o estado do nosso botão SHIFT (GPIO 39)
-    // Como tem pull-up externo, LOW (0) = Pressionado
-    bool shift_active = !gpio_get_level(39); 
+    memset(&hoja_button_data, 0, sizeof(hoja_button_data_s));
 
-    // --- DIRECIONAL (Arcade Stick Digital) ---
-    // button_data->dpad_up    |= !gpio_get_level(21);
-    // button_data->dpad_down  |= !gpio_get_level(13);
-    // button_data->dpad_left  |= !gpio_get_level(14);
-    // button_data->dpad_right |= !gpio_get_level(27);
+    g_shift_active = !gpio_get_level(BUTTON_SHIFT_PIN);
 
-    // --- LÓGICA DO SHIFT (Layers) ---
-    if (shift_active) {
+    if (g_shift_active)
+    {
         // LAYER 2 (Shift Segurado)
-        // A vira X, B vira Y, Start vira Home, Select vira Sync
-        button_data->button_up    |= !gpio_get_level(25); // A fisico dispara X
-        button_data->button_left  |= !gpio_get_level(26); // B fisico dispara Y
-        button_data->button_home  |= !gpio_get_level(32); // Start fisico dispara Home
-        
-        // Se quiser usar Select como Screenshot no Layer 2:
-        // button_data->button_minus |= !gpio_get_level(33); 
-    } else {
-        // LAYER 1 (Normal)
-        button_data->button_right       |= !gpio_get_level(25);
-        button_data->button_down        |= !gpio_get_level(26);
-        button_data->button_start       |= !gpio_get_level(32); // Start -> Start
-        button_data->button_select      |= !gpio_get_level(33); // Select -> Select
-    }
+        // Face buttons: A -> X, B -> Y; Start -> Home; Select -> Pair
+        hoja_button_data.button_up = !gpio_get_level(BUTTON_A_PIN);
+        hoja_button_data.button_left = !gpio_get_level(BUTTON_B_PIN);
+        hoja_button_data.button_home = !gpio_get_level(BUTTON_START_PIN);
+        hoja_button_data.button_pair = !gpio_get_level(BUTTON_SELECT_PIN);
 
-    // --- GATILHOS (Sempre iguais) ---
-    button_data->trigger_l |= !gpio_get_level(19);
-    button_data->trigger_r |= !gpio_get_level(23);
+        // Direcional -> D-pad digital
+        hoja_button_data.dpad_up = !gpio_get_level(DPAD_UP_PIN);
+        hoja_button_data.dpad_down = !gpio_get_level(DPAD_DOWN_PIN);
+        hoja_button_data.dpad_left = !gpio_get_level(DPAD_LEFT_PIN);
+        hoja_button_data.dpad_right = !gpio_get_level(DPAD_RIGHT_PIN);
+
+        // Gatilhos -> ZL / ZR
+        hoja_button_data.trigger_zl = !gpio_get_level(TRIGGER_L_PIN);
+        hoja_button_data.trigger_zr = !gpio_get_level(TRIGGER_R_PIN);
+    }
+    else
+    {
+        // LAYER 1 (Normal)
+        // Face buttons: A -> A, B -> B; Start/Select normais
+        hoja_button_data.button_right = !gpio_get_level(BUTTON_A_PIN);
+        hoja_button_data.button_down = !gpio_get_level(BUTTON_B_PIN);
+        hoja_button_data.button_start = !gpio_get_level(BUTTON_START_PIN);
+        hoja_button_data.button_select = !gpio_get_level(BUTTON_SELECT_PIN);
+
+        // Gatilhos -> L / R
+        hoja_button_data.trigger_l = !gpio_get_level(TRIGGER_L_PIN);
+        hoja_button_data.trigger_r = !gpio_get_level(TRIGGER_R_PIN);
+
+        // Direcional -> analógico falso (gerenciado em stick_task via g_shift_active)
+    }
 }
 
 void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 {
+
     printf("bebopCORE Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
     if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECTED)
     {
@@ -45,52 +54,57 @@ void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
     }
 }
 
-void stick_task(hoja_analog_data_s* analog_data)
+void stick_task(void)
 {
-    // Começamos no centro (Neutro)
-    analog_data->ls_x = 1020;
-    analog_data->ls_y = 1020;
+    // Centro neutro
+    hoja_analog_data.ls_x = 1020;
+    hoja_analog_data.ls_y = 1020;
 
-    // Eixo X (Esquerda / Direita)
-    if (!gpio_get_level(27)) { // RIGHT_PIN
-        analog_data->ls_x = 2040;
-    } else if (!gpio_get_level(14)) { // LEFT_PIN
-        analog_data->ls_x = 0;
-    }
+    // Shift ativo -> direcional vai pro D-pad (button_task cuida disso), analógico fica neutro
+    if (g_shift_active)
+        return;
 
-    // Eixo Y (Cima / Baixo)
-    // No Switch, UP costuma ser o valor máximo (2040)
-    if (!gpio_get_level(21)) { // UP_PIN
-        analog_data->ls_y = 2040;
-    } else if (!gpio_get_level(13)) { // DOWN_PIN
-        analog_data->ls_y = 0;
-    }
+    // Shift inativo -> direcional vira analógico falso
+    if (!gpio_get_level(DPAD_RIGHT_PIN))
+        hoja_analog_data.ls_x = 2040;
+    else if (!gpio_get_level(DPAD_LEFT_PIN))
+        hoja_analog_data.ls_x = 0;
+
+    if (!gpio_get_level(DPAD_UP_PIN))
+        hoja_analog_data.ls_y = 2040;
+    else if (!gpio_get_level(DPAD_DOWN_PIN))
+        hoja_analog_data.ls_y = 0;
 }
 
 void app_main(void)
 {
-    printf("bebopCORE Arcade Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
+    printf("bebopCORE GB Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
 
-    // 1. A ORDEM CERTA DA NVS (Mata o erro 0x2)
-    hoja_init();
+    // 1. HARDWARE PRIMEIRO
+    n64_init();
 
-    // 2. Registra os callbacks 
-    // (Não registramos o analógico porque o arcade é digital)
+    // 2. REGISTRA OS CALLBACKS (OBRIGATÓRIO ser antes do init)
     hoja_register_button_callback(button_task);
     hoja_register_analog_callback(stick_task);
     hoja_register_event_callback(event_task);
 
-    // 3. Configura o Core
-    hoja_set_core(HOJA_CORE_NS);
-    
-    // Mudamos para PROCON para compatibilidade total no Switch
-    core_ns_set_subcore(NS_TYPE_PROCON); 
-
-    // 4. Inicia
-    while(hoja_start_core() != HOJA_OK)
+    // 3. INICIALIZA O HOJA (Agora ele vai ver os callbacks e não vai dar erro)
+    hoja_err_t err = hoja_init();
+    if (err != HOJA_OK)
     {
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-        printf("bebopCORE. Retrying...\n");
+        printf("Falha no hoja_init: %d\n", err);
+        return;
     }
-    printf("bebopCORE. Switch Connected!\n");
+
+    // 4. CONFIGURA O CORE
+    hoja_set_core(HOJA_CORE_NS);
+    core_ns_set_subcore(NS_TYPE_PROCON);
+
+    // 5. SOBE O BLUETOOTH
+    printf("Iniciando Bluetooth...\n");
+    if (hoja_start_core() != HOJA_OK)
+    {
+        printf("Erro no start_core. Tentando novamente...\n");
+        esp_restart();
+    }
 }

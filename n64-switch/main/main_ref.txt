@@ -1,0 +1,27 @@
+void app_main(void)
+{
+    printf("bebopCORE Arcade Mode. HEAP=%#010lx\n", esp_get_free_heap_size());
+
+    // 1. A ORDEM CERTA DA NVS (Mata o erro 0x2)
+    hoja_init();
+
+    // 2. Registra os callbacks 
+    // (Não registramos o analógico porque o arcade é digital)
+    hoja_register_button_callback(button_task);
+    hoja_register_analog_callback(stick_task);
+    hoja_register_event_callback(event_task);
+
+    // 3. Configura o Core
+    hoja_set_core(HOJA_CORE_NS);
+    
+    // Mudamos para PROCON para compatibilidade total no Switch
+    core_ns_set_subcore(NS_TYPE_PROCON); 
+
+    // 4. Inicia
+    while(hoja_start_core() != HOJA_OK)
+    {
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+        printf("bebopCORE. Retrying...\n");
+    }
+    printf("bebopCORE. Switch Connected!\n");
+}

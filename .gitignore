@@ -40,3 +40,12 @@ release/
 *.log
 sdkconfig.old
 *-backups/
+
+
+
+
+# mais
+.venv/
+*.pyc
+__pycache__/
+*.log
