@@ -10,3 +10,6 @@
 [submodule "n64-blueretro/components/BluControl-SDK-ESP32"]
 	path = n64-blueretro/components/BluControl-SDK-ESP32
 	url = https://github.com/JPZV/BluControl-SDK-ESP32
+[submodule "n64-blueretro/components/esp-nimble-cpp"]
+	path = n64-blueretro/components/esp-nimble-cpp
+	url = https://github.com/JPZV/esp-nimble-cpp.git
