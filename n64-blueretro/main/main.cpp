@@ -5,7 +5,7 @@ BleGamepadConfiguration bleGamepadConfig;
 
 TaskHandle_t loopTaskHandle = NULL;
 
-#define buttonsLength 5
+#define buttonsLength 6
 
 n64Button buttons[buttonsLength] =
 {
@@ -13,13 +13,20 @@ n64Button buttons[buttonsLength] =
     {BUTTON_B_PIN,      BUTTON_4},
     {TRIGGER_L_PIN,     BUTTON_7},
     {TRIGGER_R_PIN,     BUTTON_8},
+    {TRIGGER_Z_PIN,     BUTTON_9},
     {BUTTON_START_PIN,  BUTTON_12},
 };
 
 int btn_x_axis = 0;
 int btn_y_axis = 0;
 int dpad_axis = 0;
+int x_axis = 0;
+int y_axis = 0;
 
+int prev_x_axis = 0;
+int prev_y_axis = 0;
+int prev_c_x_axis = 0;
+int prev_c_y_axis = 0;
 int prev_dpad_axis = 0;
 bool is_button_pressed = false;
 bool need_report = false;
@@ -93,6 +100,43 @@ void app_loop(void *params)
 
             bleGamepad.setHat1(dpad_axis);
 
+            btn_x_axis = btn_y_axis = 0;
+            if (!gpio_get_level(C_DOWN_PIN))
+                btn_y_axis = -1;
+            if (!gpio_get_level(C_UP_PIN))
+                btn_y_axis = 1;
+            if (!gpio_get_level(C_LEFT_PIN))
+                btn_x_axis = -1;
+            if (!gpio_get_level(C_RIGHT_PIN))
+                btn_x_axis = 1;
+
+            // Joystick
+            x_axis = n64_get_joystick_x();
+            y_axis = -n64_get_joystick_y();
+            
+            // Next two if statement sets a deadzone to avoid phantom readings when x and y values are within the range +-10
+            if (abs(x_axis) <= 10)
+            {
+                x_axis = 0;
+            }
+            
+            if (abs(y_axis) <= 10)
+            {
+                y_axis = 0;
+            }
+
+            bleGamepad.setAxes((x_axis + JOYSTICK_MAX_X) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_X,
+                               (y_axis + JOYSTICK_MAX_Y) * JOYSTICK_ABS_MAX / JOYSTICK_MAX_Y,
+                               0, 0,
+                               (btn_x_axis + 1) * JOYSTICK_ABS_MAX,
+                               (btn_y_axis + 1) * JOYSTICK_ABS_MAX);
+            if (x_axis != prev_x_axis || y_axis != prev_y_axis || btn_x_axis != prev_c_x_axis || btn_y_axis != prev_c_y_axis)
+                need_report = true;
+            prev_x_axis = x_axis;
+            prev_y_axis = y_axis;
+            prev_c_x_axis = btn_x_axis;
+            prev_c_y_axis = btn_y_axis;
+
             if (need_report)
                 bleGamepad.sendReport();
         }
@@ -109,9 +153,9 @@ extern "C" void app_main(void)
     bleGamepadConfig.setAutoReport(false);
     bleGamepadConfig.setButtonCount(12);
     bleGamepadConfig.setAxesMin(0x0000);
-    bleGamepadConfig.setAxesMax(255);
+    bleGamepadConfig.setAxesMax(JOYSTICK_ABS_MAX * 2);
     bleGamepadConfig.setWhichSpecialButtons(true, false, false, false, false, false, false, false);
-    bleGamepadConfig.setWhichAxes(false, false, false, false, false, false, false, false);
+    bleGamepadConfig.setWhichAxes(true, true, false, true, true, false, false, false);
     bleGamepad.begin(&bleGamepadConfig);
 
     xTaskCreatePinnedToCore(app_loop, "APP_LOOP", 4096, NULL, tskIDLE_PRIORITY, &loopTaskHandle, 1);

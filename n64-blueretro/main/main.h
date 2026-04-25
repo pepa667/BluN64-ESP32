@@ -8,7 +8,6 @@
 #include "NimBLEDevice.h"
 #include <BleGamepad.h>
 #include <tgmath.h>
-#include "nvs_flash.h"
 
 #define PI 3.14159265
 
