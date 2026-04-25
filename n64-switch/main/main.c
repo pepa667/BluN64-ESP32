@@ -17,18 +17,18 @@ void button_task(hoja_button_data_s *button_data)
     if (shift_active) {
         // LAYER 2 (Shift Segurado)
         // A vira X, B vira Y, Start vira Home, Select vira Sync
-        button_data->button_x    |= !gpio_get_level(25); // A fisico dispara X
-        button_data->button_y    |= !gpio_get_level(26); // B fisico dispara Y
-        button_data->button_home |= !gpio_get_level(32); // Start fisico dispara Home
+        button_data->button_up    |= !gpio_get_level(25); // A fisico dispara X
+        button_data->button_left  |= !gpio_get_level(26); // B fisico dispara Y
+        button_data->button_home  |= !gpio_get_level(32); // Start fisico dispara Home
         
         // Se quiser usar Select como Screenshot no Layer 2:
         // button_data->button_minus |= !gpio_get_level(33); 
     } else {
         // LAYER 1 (Normal)
-        button_data->button_a      |= !gpio_get_level(25);
-        button_data->button_b      |= !gpio_get_level(26);
-        button_data->button_plus   |= !gpio_get_level(32); // Start -> Plus (+)
-        button_data->button_minus  |= !gpio_get_level(33); // Select -> Minus (-)
+        button_data->button_up     |= !gpio_get_level(25);
+        button_data->button_left   |= !gpio_get_level(26);
+        button_data->button_start  |= !gpio_get_level(32); // Start -> Start
+        button_data->button_select |= !gpio_get_level(33); // Select -> Select
     }
 
     // --- GATILHOS (Sempre iguais) ---
@@ -39,7 +39,7 @@ void button_task(hoja_button_data_s *button_data)
 void event_task(hoja_event_type_t type, uint8_t evt, uint8_t param)
 {
     printf("bebopCORE Event: \n\ttype: %d\n\tevent: %d\n\tparam: %d\n", type, evt, param);
-    if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECT)
+    if (type == HOJA_EVT_BT && evt == HEVT_BT_DISCONNECTED)
     {
         esp_restart();
     }
