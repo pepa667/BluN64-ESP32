@@ -1,7 +1,7 @@
 [submodule "n64-blueretro/components/esp-nimble-cpp"]
 	path = n64-blueretro/components/esp-nimble-cpp
 	url = https://github.com/h2zero/esp-nimble-cpp
-	branch = release/2.0
+	branch = release/1.3
 [submodule "n64-blueretro/components/ESP32-BLE-Gamepad-idf"]
 	path = n64-blueretro/components/ESP32-BLE-Gamepad-idf
 	url = https://github.com/JPZV/ESP32-BLE-Gamepad-idf
